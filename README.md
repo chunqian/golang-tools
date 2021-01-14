@@ -1,5 +1,9 @@
 # Go Tools
 
+## Modify
+
+fix [go-raylib](https://github.com/chunqian/go-raylib) code autocomplete slow.
+
 This subrepository holds the source for various packages and tools that support
 the Go programming language.
 
