@@ -11,9 +11,9 @@ import (
 	"go/types"
 	"strings"
 
-	"golang.org/x/tools/internal/event"
+	// "golang.org/x/tools/internal/event"
 	"golang.org/x/tools/internal/imports"
-	"golang.org/x/tools/internal/lsp/debug/tag"
+	// "golang.org/x/tools/internal/lsp/debug/tag"
 	"golang.org/x/tools/internal/lsp/protocol"
 	"golang.org/x/tools/internal/lsp/snippet"
 	"golang.org/x/tools/internal/span"
@@ -100,11 +100,11 @@ func (c *completer) item(ctx context.Context, cand candidate) (CompletionItem, e
 			kind = protocol.MethodCompletion
 		}
 
-		if cand.expandFuncCall {
-			if err := expandFuncCall(sig); err != nil {
-				return CompletionItem{}, err
-			}
-		}
+	// 	if cand.expandFuncCall {
+	// 		if err := expandFuncCall(sig); err != nil {
+	// 			return CompletionItem{}, err
+	// 		}
+	// 	}
 	case *types.PkgName:
 		kind = protocol.ModuleCompletion
 		detail = fmt.Sprintf("%q", obj.Imported().Path())
@@ -168,42 +168,42 @@ func (c *completer) item(ctx context.Context, cand candidate) (CompletionItem, e
 		snippet:             snip,
 		obj:                 obj,
 	}
-	// If the user doesn't want documentation for completion items.
-	if !c.opts.documentation {
-		return item, nil
-	}
-	pos := c.snapshot.View().Session().Cache().FileSet().Position(obj.Pos())
+	// // If the user doesn't want documentation for completion items.
+	// if !c.opts.documentation {
+	// 	return item, nil
+	// }
+	// pos := c.snapshot.View().Session().Cache().FileSet().Position(obj.Pos())
 
-	// We ignore errors here, because some types, like "unsafe" or "error",
-	// may not have valid positions that we can use to get documentation.
-	if !pos.IsValid() {
-		return item, nil
-	}
-	uri := span.URIFromPath(pos.Filename)
+	// // We ignore errors here, because some types, like "unsafe" or "error",
+	// // may not have valid positions that we can use to get documentation.
+	// if !pos.IsValid() {
+	// 	return item, nil
+	// }
+	// uri := span.URIFromPath(pos.Filename)
 
-	// Find the source file of the candidate, starting from a package
-	// that should have it in its dependencies.
-	searchPkg := c.pkg
-	if cand.imp != nil && cand.imp.pkg != nil {
-		searchPkg = cand.imp.pkg
-	}
-	file, pkg, err := findPosInPackage(c.snapshot.View(), searchPkg, obj.Pos())
-	if err != nil {
-		return item, nil
-	}
-	ident, err := findIdentifier(ctx, c.snapshot, pkg, file, obj.Pos())
-	if err != nil {
-		return item, nil
-	}
-	hover, err := HoverIdentifier(ctx, ident)
-	if err != nil {
-		event.Error(ctx, "failed to find Hover", err, tag.URI.Of(uri))
-		return item, nil
-	}
-	item.Documentation = hover.Synopsis
-	if c.opts.fullDocumentation {
-		item.Documentation = hover.FullDocumentation
-	}
+	// // Find the source file of the candidate, starting from a package
+	// // that should have it in its dependencies.
+	// searchPkg := c.pkg
+	// if cand.imp != nil && cand.imp.pkg != nil {
+	// 	searchPkg = cand.imp.pkg
+	// }
+	// file, pkg, err := findPosInPackage(c.snapshot.View(), searchPkg, obj.Pos())
+	// if err != nil {
+	// 	return item, nil
+	// }
+	// ident, err := findIdentifier(ctx, c.snapshot, pkg, file, obj.Pos())
+	// if err != nil {
+	// 	return item, nil
+	// }
+	// hover, err := HoverIdentifier(ctx, ident)
+	// if err != nil {
+	// 	event.Error(ctx, "failed to find Hover", err, tag.URI.Of(uri))
+	// 	return item, nil
+	// }
+	// item.Documentation = hover.Synopsis
+	// if c.opts.fullDocumentation {
+	// 	item.Documentation = hover.FullDocumentation
+	// }
 	return item, nil
 }
 
