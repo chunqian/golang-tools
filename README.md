@@ -1,9 +1,5 @@
 # Go Tools
 
-## Modify
-
-fix [go-raylib](https://github.com/chunqian/go-raylib) code autocomplete slow.
-
 This subrepository holds the source for various packages and tools that support
 the Go programming language.
 
@@ -15,6 +11,10 @@ Others, including the Go `guru` and the test coverage tool, can be fetched with
 
 Packages include a type-checker for Go and an implementation of the
 Static Single Assignment form (SSA) representation for Go programs.
+
+## Modify
+
+fix [go-raylib](https://github.com/chunqian/go-raylib) code autocomplete slow.
 
 ## Download/Install
 
